@@ -8,8 +8,7 @@ import {
   InteractionType,
   verifyKey,
 } from 'discord-interactions';
-import { AWW_COMMAND, INVITE_COMMAND } from './commands.js';
-import { getCuteUrl } from './reddit.js';
+import cmds from './commands.js';
 
 class JsonResponse extends Response {
   constructor(body, init) {
@@ -51,31 +50,19 @@ router.post('/', async (request, env) => {
 
   if (message.type === InteractionType.APPLICATION_COMMAND) {
     // Most user commands will come as `APPLICATION_COMMAND`.
-    switch (message.data.name.toLowerCase()) {
-      case AWW_COMMAND.name.toLowerCase(): {
-        console.log('handling cute request');
-        const cuteUrl = await getCuteUrl();
-        return new JsonResponse({
-          type: 4,
-          data: {
-            content: cuteUrl,
-          },
-        });
-      }
-      case INVITE_COMMAND.name.toLowerCase(): {
-        const applicationId = env.DISCORD_APPLICATION_ID;
-        const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${applicationId}&scope=applications.commands`;
-        return new JsonResponse({
-          type: 4,
-          data: {
-            content: INVITE_URL,
-            flags: 64,
-          },
-        });
-      }
-      default:
-        console.error('Unknown Command');
-        return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
+
+    const cmd = message.data.name.toLowerCase();
+
+    if (!cmd in cmds) {
+      console.error('Unknown Command');
+      return new JsonResponse({ error: 'Unknown Type' }, { status: 400 });
+    }
+
+    try {
+      return await new JsonResponse(cmds[cmd].handler(message), { status: 200 });
+    } catch (e) {
+      console.error(e);
+      return new JsonResponse({ error: 'Bad Arguments' }, { status: 401 });
     }
   }
 

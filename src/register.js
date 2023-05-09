@@ -1,4 +1,4 @@
-import { AWW_COMMAND, INVITE_COMMAND } from './commands.js';
+import cmds from './commands.js';
 import fetch from 'node-fetch';
 
 /**
@@ -64,7 +64,12 @@ async function registerCommands(url) {
       Authorization: `Bot ${token}`,
     },
     method: 'PUT',
-    body: JSON.stringify([AWW_COMMAND, INVITE_COMMAND]),
+    body: JSON.stringify(
+      cmds.map(cmd => {
+        delete cmd.handler;
+        return cmd;
+      })
+    ),
   });
 
   if (response.ok) {

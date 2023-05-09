@@ -1,9 +1,9 @@
-name = "awwbot"
+name = "adex"
 main = "./src/server.js"
 type = "javascript"
-compatibility_date="2022-02-26"
+compatibility_date="2022-05-09"
 
-account_id = "c21e5aacc2d33c52c2b6589adbe56dc0"
+account_id = "561c497e6af0825b02426fb9990d11a8"
 workers_dev = true
 
 [[rules]]
@@ -14,8 +14,8 @@ globs = [ "**/*.js" ]
 
 [env.production]
 
-# [secrets]
-# DISCORD_TOKEN
-# DISCORD_PUBLIC_KEY
-# DISCORD_APPLICATION_ID
-# DISCORD_TEST_GUILD_ID
+[secrets]
+DISCORD_TOKEN = "NzkyNDY1MjcxODE3NTAyNzUz.GHx5bn.zuSrKcdXOClRrM8u_hZD2xWYf0jJDSRf6L2RmI"
+DISCORD_PUBLIC_KEY = "251064f8e86c40069b1e72fee2b446a2eb5dd6e5d91ff41d3b5192985e62c6ac
+DISCORD_APPLICATION_ID = "792465271817502753"
+DISCORD_TEST_GUILD_ID = "792450719923044362"
